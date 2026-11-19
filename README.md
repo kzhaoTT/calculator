@@ -21,6 +21,50 @@ Calculator ships regularly with new features and bug fixes. You can get the late
   never lose precision.
 
 ## Getting started
+
+### macOS
+Prerequisites:
+- Your Mac must be running macOS 14.0 (Sonoma) or newer (Apple Silicon or Intel).
+- Install [Xcode](https://developer.apple.com/xcode/) 16 or newer (or a Swift 6.0+ toolchain with the macOS SDK and C++20 compiler).
+- `python3` (optional, included with Xcode Command Line Tools) is used by `macos/build-app.sh` to generate the `.icns` app icon.
+
+Get the code:
+```bash
+git clone https://github.com/kzhaoTT/calculator.git
+cd calculator
+```
+
+#### Build a standalone `.app` bundle (Recommended)
+```bash
+./macos/build-app.sh
+open build/Calculator.app
+```
+By default, `macos/build-app.sh` compiles in `release` mode and assembles an ad-hoc signed app bundle at `build/Calculator.app` (including resources and an app icon). Pass `debug` to build a debug bundle instead:
+```bash
+./macos/build-app.sh debug
+```
+
+#### Build, run, and test with Swift Package Manager
+```bash
+# Compile in release mode
+swift build -c release
+
+# Run directly in debug mode
+swift run CalculatorMac
+
+# Run the macOS unit tests
+swift test
+```
+
+#### Build and run in Xcode
+```bash
+open Package.swift
+```
+Select the `CalculatorMac` scheme and press `Cmd+R` to build and run.
+
+> **Architecture note:** The macOS port compiles the upstream C++ calculation engine (`src/CalcManager`, including `CEngine`, `Ratpack`, and `UnitConverter`) natively via Swift Package Manager (`CalcManagerCompat` -> `CalcManager` -> `CCalcManager`) and pairs it with a native SwiftUI/AppKit interface under [`macos/`](macos).
+
+### Windows
 Prerequisites:
 - Your computer must be running Windows 11, build 22000 or newer.
 - Install the latest version of [Visual Studio](https://developer.microsoft.com/en-us/windows/downloads) (the free community edition is sufficient).
